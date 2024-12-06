@@ -1,4 +1,6 @@
 
+using InnovateFuture.Application.Orders.Commands;
+using InnovateFuture.Application.Orders.Queries;
 using InnovateFuture.Infrastructure.Interfaces;
 using InnovateFuture.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +23,8 @@ namespace InnovateFuture.Api
             builder.Services.AddControllers();
             builder.Services.AddMediatR(configuration =>
             {
-                configuration.RegisterServicesFromAssembly(typeof(Program).Assembly);
+                configuration.RegisterServicesFromAssembly(typeof(CreateOrderHandler).Assembly);
+                configuration.RegisterServicesFromAssembly(typeof(GetOrderHandler).Assembly);
             });
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();

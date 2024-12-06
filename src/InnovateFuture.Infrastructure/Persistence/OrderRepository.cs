@@ -19,13 +19,10 @@ namespace InnovateFuture.Infrastructure.Persistence
                 .Include(o => o.Items) // Include related OrderItems
                 .FirstOrDefaultAsync(o => o.Id == id);
         }
-
         public async Task AddAsync(Order order)
         {
             await _dbContext.Orders.AddAsync(order);
             await _dbContext.SaveChangesAsync();
         }
-
-        
     }
 }
