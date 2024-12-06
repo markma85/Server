@@ -2,7 +2,7 @@ using MediatR;
 using InnovateFuture.Application.DTOs;
 using InnovateFuture.Infrastructure.Interfaces;
 
-namespace InnovateFuture.Application.Orders.Query.GetOrder
+namespace InnovateFuture.Application.Orders.Queries
 {
     public class GetOrderHandler : IRequestHandler<GetOrderQuery, OrderDto>
     {

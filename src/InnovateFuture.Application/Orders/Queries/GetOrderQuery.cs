@@ -1,7 +1,7 @@
 using MediatR;
 using InnovateFuture.Application.DTOs;
 
-namespace InnovateFuture.Application.Orders.Query.GetOrder
+namespace InnovateFuture.Application.Orders.Queries
 {
     public class GetOrderQuery : IRequest<OrderDto>
     {

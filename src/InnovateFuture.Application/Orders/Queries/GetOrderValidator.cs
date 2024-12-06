@@ -1,4 +1,4 @@
-namespace InnovateFuture.Application.Orders.Query.GetOrder;
+namespace InnovateFuture.Application.Orders.Queries;
 
 public class GetOrderValidator
 {

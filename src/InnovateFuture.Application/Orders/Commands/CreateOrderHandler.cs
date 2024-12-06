@@ -2,7 +2,7 @@ using InnovateFuture.Infrastructure.Interfaces;
 using MediatR;
 using InnovateFuture.Domain.Entities;
 
-namespace InnovateFuture.Application.Orders.Commands.CreateOrder
+namespace InnovateFuture.Application.Orders.Commands
 {
     public class CreateOrderHandler : IRequestHandler<CreateOrderCommand, Guid>
     {

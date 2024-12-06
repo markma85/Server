@@ -1,4 +1,4 @@
-namespace InnovateFuture.Application.Orders.Commands.CreateOrder;
+namespace InnovateFuture.Application.Orders.Commands;
 
 public class CreateOrderValidator
 {

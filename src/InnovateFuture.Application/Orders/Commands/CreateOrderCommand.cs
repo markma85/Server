@@ -1,7 +1,7 @@
 
 using MediatR;
 
-namespace InnovateFuture.Application.Orders.Commands.CreateOrder
+namespace InnovateFuture.Application.Orders.Commands
 {
     public class CreateOrderCommand : IRequest<Guid>
     {
