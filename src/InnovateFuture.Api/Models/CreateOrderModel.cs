@@ -1,4 +1,6 @@
-namespace MyProject.Api.Models
+using System.ComponentModel.DataAnnotations;
+
+namespace InnovateFuture.Api.Models
 {
     public class CreateOrderModel
     {

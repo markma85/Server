@@ -1,8 +1,11 @@
-using MyProject.Api.Models;
-using MyProject.Application.DTOs;
-using MyProject.Application.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using MediatR;
+using InnovateFuture.Api.Models;
+using InnovateFuture.Application.Orders.Commands.CreateOrder;
+using InnovateFuture.Application.Orders.Query.GetOrder;
 
-namespace MyProject.Api.Controllers
+
+namespace InnovateFuture.Api.Controllers
 {
     [ApiController]
     [Route("api/orders")]
@@ -37,7 +40,7 @@ namespace MyProject.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetOrder(Guid id)
+        public async Task<IActionResult> GetOrder([FromQuery]Guid id)
         {
             var query = new GetOrderQuery { OrderId = id };
             var order = await _mediator.Send(query);

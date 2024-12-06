@@ -1,4 +1,4 @@
-namespace MyProject.Application.DTOs
+namespace InnovateFuture.Application.DTOs
 {
     public class CreateOrderDto
     {

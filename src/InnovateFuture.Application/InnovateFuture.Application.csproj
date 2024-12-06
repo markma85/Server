@@ -8,6 +8,16 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\tests\InnovateFuture.Application.Tests\InnovateFuture.Application.Tests.csproj" />
+    <ProjectReference Include="..\InnovateFuture.Infrastructure\InnovateFuture.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.4.1" />
+    <PackageReference Include="MediatR.Contracts" Version="2.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Orders\" />
   </ItemGroup>
 
 </Project>

@@ -1,21 +1,26 @@
-public class Order
+namespace InnovateFuture.Domain.Entities
 {
-    public Guid Id { get; private set; }
-    public string CustomerName { get; private set; }
-    public DateTime CreatedDate { get; private set; }
-    private readonly List<OrderItem> _items = new();
-
-    public decimal TotalAmount => _items.Sum(item => item.TotalPrice);
-
-    public Order(string customerName)
+    public class Order
     {
-        Id = Guid.NewGuid();
-        CustomerName = customerName ?? throw new ArgumentNullException(nameof(customerName));
-        CreatedDate = DateTime.UtcNow;
-    }
+        public Guid Id { get; private set; }
+        public string CustomerName { get; private set; }
+        public DateTime CreatedDate { get; private set; }
 
-    public void AddItem(string productName, int quantity, decimal unitPrice)
-    {
-        _items.Add(new OrderItem(productName, quantity, unitPrice));
+        // Navigation property for EF Core
+        public List<OrderItem> Items { get; private set; } = new();
+
+        public decimal TotalAmount => Items.Sum(item => item.TotalPrice);
+
+        public Order(string customerName)
+        {
+            Id = Guid.NewGuid();
+            CustomerName = customerName ?? throw new ArgumentNullException(nameof(customerName));
+            CreatedDate = DateTime.UtcNow;
+        }
+
+        public void AddItem(string productName, int quantity, decimal unitPrice)
+        {
+            Items.Add(new OrderItem(productName, quantity, unitPrice));
+        }
     }
 }
