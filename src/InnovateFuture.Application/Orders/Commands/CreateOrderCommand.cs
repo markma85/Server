@@ -1,11 +1,14 @@
 
+using System.ComponentModel.DataAnnotations;
 using MediatR;
 
 namespace InnovateFuture.Application.Orders.Commands
 {
     public class CreateOrderCommand : IRequest<Guid>
     {
+        [Required]//do simple model validation, can be caught in filter
         public string CustomerName { get; set; }
+        [Required]
         public List<CreateOrderItem> Items { get; set; }
 
         public class CreateOrderItem

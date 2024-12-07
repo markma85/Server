@@ -1,3 +1,4 @@
+using AutoMapper;
 using InnovateFuture.Infrastructure.Interfaces;
 using MediatR;
 using InnovateFuture.Domain.Entities;
@@ -7,22 +8,22 @@ namespace InnovateFuture.Application.Orders.Commands
     public class CreateOrderHandler : IRequestHandler<CreateOrderCommand, Guid>
     {
         private readonly IOrderRepository _orderRepository;
-
-        public CreateOrderHandler(IOrderRepository orderRepository)
+        private readonly IMapper _mapper;
+        public CreateOrderHandler(IOrderRepository orderRepository, IMapper mapper)
         {
             _orderRepository = orderRepository;
+            _mapper = mapper;
         }
 
         public async Task<Guid> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
         {
-            var order = new Order(request.CustomerName);
+            // Use AutoMapper to map the request to the Order entity
+            var order = _mapper.Map<Order>(request);
 
-            foreach (var item in request.Items)
-            {
-                order.AddItem(item.ProductName, item.Quantity, item.UnitPrice);
-            }
-
+            // Add the order to the repository
             await _orderRepository.AddAsync(order);
+
+            // Return the newly created order's ID
             return order.Id;
         }
     }

@@ -1,3 +1,5 @@
+using InnovateFuture.Api.Enums;
+using InnovateFuture.Api.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using InnovateFuture.Application.Orders.Commands;
@@ -5,8 +7,9 @@ using InnovateFuture.Application.Orders.Queries;
 
 namespace InnovateFuture.Api.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = false, GroupName = nameof(APIVersion.V1))]
     [ApiController]
-    [Route("api/orders")]
+    [Route("api/v1/[controller]")]
     public class OrdersController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -15,17 +18,24 @@ namespace InnovateFuture.Api.Controllers
         {
             _mediator = mediator;
         }
-
+        
+        /// <summary>
+        /// Create a new order
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> CreateOrder([FromBody] CreateOrderCommand command)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             var orderId = await _mediator.Send(command);
             return Ok(new { OrderId = orderId });
         }
 
+        /// <summary>
+        /// Retrieves an order by its specified ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOrder([FromQuery]Guid id)
         {
@@ -33,8 +43,9 @@ namespace InnovateFuture.Api.Controllers
             var order = await _mediator.Send(query);
 
             if (order == null)
-                return NotFound();
-
+            {
+                throw new NotFoundException("this order does not exist!");
+            }
             return Ok(order);
         }
     }

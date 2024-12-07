@@ -1,6 +1,9 @@
 
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using InnovateFuture.Api.Filters;
 using InnovateFuture.Api.Init;
+using InnovateFuture.Api.Middleware;
 using InnovateFuture.Application.Orders.Commands;
 using InnovateFuture.Application.Orders.Queries;
 using InnovateFuture.Infrastructure.Config;
@@ -97,7 +100,9 @@ namespace InnovateFuture.Api
             {
                 app.UseSwaggerEXT();
             }
-
+            
+            app.UseMiddleware<FluentValidationMiddleware>();
+            
             app.UseAuthentication();
 
             app.UseAuthorization();

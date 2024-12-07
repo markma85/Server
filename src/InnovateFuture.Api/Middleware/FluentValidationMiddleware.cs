@@ -1,6 +1,5 @@
 using System.Text.Json;
 using FluentValidation;
-using Microsoft.AspNetCore.Http;
 using Net_6_Assignment.Common;
 
 namespace InnovateFuture.Api.Middleware
