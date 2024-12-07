@@ -10,4 +10,8 @@
     <ProjectReference Include="..\..\tests\InnovateFuture.Domain.Tests\InnovateFuture.Domain.Tests.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Enums\" />
+  </ItemGroup>
+
 </Project>
