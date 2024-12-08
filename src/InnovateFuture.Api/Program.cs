@@ -6,6 +6,7 @@ using InnovateFuture.Api.Init;
 using InnovateFuture.Api.Middleware;
 using InnovateFuture.Application.Orders.Commands;
 using InnovateFuture.Application.Orders.Queries;
+using InnovateFuture.Application.Validators;
 using InnovateFuture.Infrastructure.Config;
 using InnovateFuture.Infrastructure.Interfaces;
 using InnovateFuture.Infrastructure.Persistence;
@@ -86,7 +87,13 @@ namespace InnovateFuture.Api
             
             // swagger config => see more details in swagger config extension
             builder.Services.AddSwaggerEXT();
-            
+
+
+            #region validators
+            builder.Services.AddValidatorsFromAssemblyContaining<OrderDtoValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<CreateOrderValidator>();
+            #endregion
+
             #region NLog
             // NLog: Setup NLog for Dependency injection
             builder.Logging.ClearProviders();
