@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Net_6_Assignment.Common
+namespace InnovateFuture.Api.Common
 {
     public class CommonResponse<T>
     {

@@ -1,58 +1,78 @@
-using System.ComponentModel.DataAnnotations;
+using InnovateFuture.Api.Common;
 using InnovateFuture.Api.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Net_6_Assignment.Common;
 
 namespace InnovateFuture.Api.Filters;
 
-    public class ExceptionFilter : IExceptionFilter
+public class ExceptionFilter : IExceptionFilter
+{
+    private readonly ILogger<ExceptionFilter> _logger;
+    private readonly IWebHostEnvironment _environment;
+
+    public ExceptionFilter(ILogger<ExceptionFilter> logger, IWebHostEnvironment environment)
     {
-        private readonly ILogger<ExceptionFilter> _logger;
+        _logger = logger;
+        _environment = environment;
+    }
 
-        public ExceptionFilter(ILogger<ExceptionFilter> logger)
+    public void OnException(ExceptionContext context)
+    {
+        var exception = context.Exception;
+
+        var response = new CommonResponse<object>
         {
-            _logger = logger;
-        }
+            IsSuccess = false,
+            Errors = new List<string>()
+        };
 
-        public void OnException(ExceptionContext context)
+        switch (exception)
         {
-            var exception = context.Exception;
-
-            var response = new CommonResponse<object>
-            {
-                IsSuccess = false,
-                Errors = new List<string>()
-            };
-
-            if (exception is BadRequestException)
-            {
+            case FluentValidation.ValidationException validationException:
+                response.Errors.AddRange(validationException.Errors.Select(e => e.ErrorMessage));
+                context.Result = new BadRequestObjectResult(response);
+                _logger.LogWarning("Validation exception: {Errors}", response.Errors);
+                break;
+            
+            case ArgumentException:
                 response.Errors.Add(exception.Message);
                 context.Result = new BadRequestObjectResult(response);
-                _logger.LogWarning("Validation exception: {Message}", exception.Message);
-            }
-            else if (exception is NotFoundException)
-            {
+                _logger.LogWarning("Bad request exception: {Message}", exception.Message);
+                break;
+            
+            case BadRequestException:
+                response.Errors.Add(exception.Message);
+                context.Result = new BadRequestObjectResult(response);
+                _logger.LogWarning("Bad request exception: {Message}", exception.Message);
+                break;
+            
+            case NotFoundException:
                 response.Errors.Add(exception.Message);
                 context.Result = new NotFoundObjectResult(response);
                 _logger.LogWarning("Not found exception: {Message}", exception.Message);
-            }
-            else if (exception is UnauthorizedException)
-            {
+                break;
+
+            case UnauthorizedException:
                 response.Errors.Add(exception.Message);
                 context.Result = new UnauthorizedObjectResult(response);
                 _logger.LogWarning("Unauthorized exception: {Message}", exception.Message);
-            }
-            else
-            {
+                break;
+
+            default:
                 response.Errors.Add("An unknown error occurred");
+                if (_environment.IsDevelopment())
+                {
+                    response.Errors.Add($"Exception Details: {exception}");
+                }
+
                 context.Result = new JsonResult(response)
                 {
                     StatusCode = 500
                 };
                 _logger.LogError("Unexpected error: {Message}", exception.Message);
-            }
-
-            context.ExceptionHandled = true;
+                break;
         }
+
+        context.ExceptionHandled = true;
     }
+}
