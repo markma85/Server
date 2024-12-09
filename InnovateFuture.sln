@@ -4,6 +4,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InnovateFuture.Api", "src\InnovateFuture.Api\InnovateFuture.Api.csproj", "{61C0C35E-3E54-4A16-821C-1D34B62A809F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1D762D3B-2DBA-4C98-AC8C-8222519E2079} = {1D762D3B-2DBA-4C98-AC8C-8222519E2079}
+		{31FAF8B8-0082-4F39-BFAF-4BDD24F32828} = {31FAF8B8-0082-4F39-BFAF-4BDD24F32828}
+		{7FA26268-4E01-466F-A029-EBBCECA040A6} = {7FA26268-4E01-466F-A029-EBBCECA040A6}
+		{F5F7FDFD-50DE-45D8-A101-25EF591EC2D1} = {F5F7FDFD-50DE-45D8-A101-25EF591EC2D1}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InnovateFuture.Application", "src\InnovateFuture.Application\InnovateFuture.Application.csproj", "{C0A60B61-88A0-46E6-B303-663CA9F976BC}"
 EndProject
@@ -15,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InnovateFuture.Api.Tests", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InnovateFuture.Application.Tests", "tests\InnovateFuture.Application.Tests\InnovateFuture.Application.Tests.csproj", "{7FA26268-4E01-466F-A029-EBBCECA040A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InnovateFuture.Domain.Tests", "tests\InnovateFuture.Domain.Tests\InnovateFuture.Domain.Tests.csproj", "{31FAF8B8-0082-4F39-BFAF-4BDD24F32828}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InnovateFuture.Domain.Tests", "tests\InnovateFuture.Domain.Tests\InnovateFuture.Domain.Tests.csproj", "{31FAF8B8-0082-4F39-BFAF-4BDD24F32828}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -25,33 +25,39 @@ namespace InnovateFuture.Api.Filters;
                 Errors = new List<string>()
             };
 
-            if (exception is BadRequestException)
+        if (exception is BadRequestException)
+        {
+            response.Errors.Add(exception.Message);
+            context.Result = new BadRequestObjectResult(response);
+            _logger.LogWarning("Validation exception: {Message}", exception.Message);
+        }
+        else if (exception is NotFoundException)
+        {
+            response.Errors.Add(exception.Message);
+            context.Result = new NotFoundObjectResult(response);
+            _logger.LogWarning("Not found exception: {Message}", exception.Message);
+        }
+        else if (exception is UnauthorizedException)
+        {
+            response.Errors.Add(exception.Message);
+            context.Result = new UnauthorizedObjectResult(response);
+            _logger.LogWarning("Unauthorized exception: {Message}", exception.Message);
+        }
+        else if (exception is FluentValidation.ValidationException)
+        {
+            response.Errors.Add(exception.Message);
+            context.Result = new BadRequestObjectResult(response);
+            _logger.LogWarning("Validation exception: {Message}", exception.Message);
+        }
+        else
+        {
+            response.Errors.Add("An unknown error occurred");
+            context.Result = new JsonResult(response)
             {
-                response.Errors.Add(exception.Message);
-                context.Result = new BadRequestObjectResult(response);
-                _logger.LogWarning("Validation exception: {Message}", exception.Message);
-            }
-            else if (exception is NotFoundException)
-            {
-                response.Errors.Add(exception.Message);
-                context.Result = new NotFoundObjectResult(response);
-                _logger.LogWarning("Not found exception: {Message}", exception.Message);
-            }
-            else if (exception is UnauthorizedException)
-            {
-                response.Errors.Add(exception.Message);
-                context.Result = new UnauthorizedObjectResult(response);
-                _logger.LogWarning("Unauthorized exception: {Message}", exception.Message);
-            }
-            else
-            {
-                response.Errors.Add("An unknown error occurred");
-                context.Result = new JsonResult(response)
-                {
-                    StatusCode = 500
-                };
-                _logger.LogError("Unexpected error: {Message}", exception.Message);
-            }
+                StatusCode = 500
+            };
+            _logger.LogError("Unexpected error: {Message}", exception.Message);
+        }
 
             context.ExceptionHandled = true;
         }
