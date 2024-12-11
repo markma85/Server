@@ -22,13 +22,6 @@ namespace InnovateFuture.Application.Orders.Commands
 
         public async Task<Guid> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
         {
-            var validationResult = await _validator.ValidateAsync(request, cancellationToken);
-
-            if (!validationResult.IsValid)
-            {
-                throw new FluentValidation.ValidationException(validationResult.Errors);
-            }
-
             // Use AutoMapper to map the request to the Order entity
             var order = _mapper.Map<Order>(request);
 

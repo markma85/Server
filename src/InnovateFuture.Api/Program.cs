@@ -1,12 +1,14 @@
 using FluentValidation;
 using InnovateFuture.Api.Filters;
 using InnovateFuture.Api.Configs;
+using InnovateFuture.Application.Behaviors;
 using InnovateFuture.Application.Orders.Commands;
 using InnovateFuture.Application.Orders.Queries;
 using InnovateFuture.Infrastructure.Configs;
 using InnovateFuture.Infrastructure.Configs.Authentication;
 using InnovateFuture.Infrastructure.Persistence;
 using InnovateFuture.Infrastructure.Persistence.Orders;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NLog;
@@ -46,6 +48,8 @@ namespace InnovateFuture.Api
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             // customized instances
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+            builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            builder.Services.AddValidatorsFromAssembly(typeof(CreateOrderCommandValidator).Assembly);
             #endregion
             
             #region DB connection
@@ -99,7 +103,6 @@ namespace InnovateFuture.Api
 
             #region validators
             builder.Services.AddValidatorsFromAssemblyContaining<CreateOrderCommandValidator>();
-            builder.Services.AddValidatorsFromAssemblyContaining<CreateOrderItemValidator>();
             #endregion
 
             #region NLog

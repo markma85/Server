@@ -29,7 +29,8 @@ public class ExceptionFilter : IExceptionFilter
         switch (exception)
         {
             case FluentValidation.ValidationException validationException:
-                response.Errors.AddRange(validationException.Errors.Select(e => e.ErrorMessage));
+                response.Errors.AddRange(validationException.Errors
+                    .Select(e => e.ErrorMessage).Distinct());
                 context.Result = new BadRequestObjectResult(response);
                 _logger.LogWarning("Validation exception: {Errors}", response.Errors);
                 break;
