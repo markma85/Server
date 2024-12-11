@@ -1,8 +1,7 @@
-using InnovateFuture.Infrastructure.Interfaces;
-using InnovateFuture.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using InnovateFuture.Domain.Entities;
 
-namespace InnovateFuture.Infrastructure.Persistence
+namespace InnovateFuture.Infrastructure.Persistence.Orders
 {
     public class OrderRepository : IOrderRepository
     {
@@ -16,7 +15,7 @@ namespace InnovateFuture.Infrastructure.Persistence
         public async Task<Order> GetByIdAsync(Guid id)
         {
             return await _dbContext.Orders
-                .Include(o => o.Items) // Include related OrderItems
+                .Include(o => o.Items)
                 .FirstOrDefaultAsync(o => o.Id == id);
         }
         public async Task AddAsync(Order order)

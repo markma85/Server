@@ -1,10 +1,8 @@
 using AutoMapper;
-using InnovateFuture.Infrastructure.Interfaces;
 using MediatR;
 using InnovateFuture.Domain.Entities;
 using FluentValidation;
-using InnovateFuture.Application.DTOs;
-using System.ComponentModel.DataAnnotations;
+using InnovateFuture.Infrastructure.Persistence.Orders;
 
 namespace InnovateFuture.Application.Orders.Commands
 {

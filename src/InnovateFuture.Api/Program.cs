@@ -1,12 +1,12 @@
 using FluentValidation;
 using InnovateFuture.Api.Filters;
-using InnovateFuture.Api.Init;
+using InnovateFuture.Api.Configs;
 using InnovateFuture.Application.Orders.Commands;
 using InnovateFuture.Application.Orders.Queries;
-using InnovateFuture.Application.Validators;
-using InnovateFuture.Infrastructure.Config;
-using InnovateFuture.Infrastructure.Interfaces;
+using InnovateFuture.Infrastructure.Configs;
+using InnovateFuture.Infrastructure.Configs.Authentication;
 using InnovateFuture.Infrastructure.Persistence;
+using InnovateFuture.Infrastructure.Persistence.Orders;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NLog;
@@ -68,6 +68,18 @@ namespace InnovateFuture.Api
             // Disable auto model validation
             builder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
             
+            #region JWT
+            // get jwt config values from appsettings and create an obj using JWTConfig model class, IOC will handle dependency injection
+            builder.Services.Configure<JWTConfig>(builder.Configuration.GetSection(JWTConfig.Section));
+            // directly get jwt config value from appsettings and construct into an obj
+            var jwtConfig = builder.Configuration.GetSection(JWTConfig.Section).Get<JWTConfig>();
+
+            builder.Services.AddJWTEXT(jwtConfig);
+
+            builder.Services.AddTransient<CreateTokenService>();
+
+            #endregion
+            
             #region cors
             // cors
             builder.Services.AddCors(option =>
@@ -85,10 +97,9 @@ namespace InnovateFuture.Api
             // swagger config => see more details in swagger config extension
             builder.Services.AddSwaggerEXT();
 
-
             #region validators
-            builder.Services.AddValidatorsFromAssemblyContaining<OrderDtoValidator>();
-            builder.Services.AddValidatorsFromAssemblyContaining<CreateOrderValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<CreateOrderCommandValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<CreateOrderItemValidator>();
             #endregion
 
             #region NLog

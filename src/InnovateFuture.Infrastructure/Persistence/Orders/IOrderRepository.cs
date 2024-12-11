@@ -1,6 +1,6 @@
 using InnovateFuture.Domain.Entities;
 
-namespace InnovateFuture.Infrastructure.Interfaces
+namespace InnovateFuture.Infrastructure.Persistence.Orders
 {
     public interface IOrderRepository
     {

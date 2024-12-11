@@ -1,15 +1,17 @@
-using InnovateFuture.Api.Enums;
+using InnovateFuture.Api.Configs;
 using InnovateFuture.Api.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using InnovateFuture.Application.Orders.Commands;
 using InnovateFuture.Application.Orders.Queries;
+using Microsoft.AspNetCore.Authorization;
 
 namespace InnovateFuture.Api.Controllers
 {
     [ApiExplorerSettings(IgnoreApi = false, GroupName = nameof(APIVersion.V1))]
     [ApiController]
     [Route("api/v1/[controller]")]
+    
     public class OrdersController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -24,6 +26,7 @@ namespace InnovateFuture.Api.Controllers
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> CreateOrder([FromBody] CreateOrderCommand command)
         {
@@ -36,6 +39,7 @@ namespace InnovateFuture.Api.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOrder(Guid id)
         {

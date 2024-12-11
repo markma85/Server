@@ -1,4 +1,4 @@
-namespace InnovateFuture.Api.Enums;
+namespace InnovateFuture.Api.Configs;
 
 public enum APIVersion
 {   

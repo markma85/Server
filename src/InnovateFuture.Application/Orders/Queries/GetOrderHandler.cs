@@ -1,7 +1,7 @@
 using MediatR;
 using AutoMapper;
 using InnovateFuture.Application.DTOs;
-using InnovateFuture.Infrastructure.Interfaces;
+using InnovateFuture.Infrastructure.Persistence.Orders;
 
 namespace InnovateFuture.Application.Orders.Queries
 {

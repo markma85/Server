@@ -1,8 +1,7 @@
 using System.Reflection;
-using InnovateFuture.Api.Enums;
 using Microsoft.OpenApi.Models;
 
-namespace InnovateFuture.Api.Init;
+namespace InnovateFuture.Api.Configs;
 
 public static class SwaggerInitExtension
 {
@@ -18,13 +17,13 @@ public static class SwaggerInitExtension
                     // title displayed in swagger
                     option.SwaggerDoc(versionString, new OpenApiInfo
                     {
-                        Title = "My First Web Api Project",
+                        Title = "Innovate Future API",
                         Version = versionString,
-                        Description = $"This is My First Web Api Project Version: {versionString}",
+                        Description = $"The Innovate Future API ({versionString}) provides a set of endpoints to manage and interact with resources in overseas tourism. ",
                         Contact = new OpenApiContact
                         {
-                            Name = "Qingyan Yang",
-                            Url = new Uri("https://google.com")
+                            Name = "Contact Us",
+                            Url = new Uri("mailto:example@mail.com")
                         }
                     });
                 });
