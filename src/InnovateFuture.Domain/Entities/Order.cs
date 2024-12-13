@@ -1,5 +1,6 @@
-namespace InnovateFuture.Domain.Entities
-{
+using InnovateFuture.Domain.Exceptions;
+
+namespace InnovateFuture.Domain.Entities;
     public class Order
     {
         public Guid Id { get; private set; }
@@ -14,7 +15,7 @@ namespace InnovateFuture.Domain.Entities
         public Order(string customerName)
         {
             Id = Guid.NewGuid();
-            CustomerName = customerName ?? throw new ArgumentNullException(nameof(customerName));
+            CustomerName = customerName ?? throw new IFArgumentException("Customer name cannot be null");
             CreatedDate = DateTime.UtcNow;
         }
 
@@ -23,4 +24,3 @@ namespace InnovateFuture.Domain.Entities
             Items.Add(new OrderItem(productName, quantity, unitPrice));
         }
     }
-}

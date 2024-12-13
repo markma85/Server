@@ -1,10 +1,11 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using InnovateFuture.Infrastructure.Configs;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace InnovateFuture.Infrastructure.Configs.Authentication;
+namespace InnovateFuture.Application.Services.Security;
 
 public class CreateTokenService
 {

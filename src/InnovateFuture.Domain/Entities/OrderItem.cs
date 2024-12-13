@@ -1,3 +1,5 @@
+using InnovateFuture.Domain.Exceptions;
+
 namespace InnovateFuture.Domain.Entities
 {
     public class OrderItem
@@ -15,13 +17,13 @@ namespace InnovateFuture.Domain.Entities
             Id = Guid.NewGuid();
 
             if (string.IsNullOrWhiteSpace(productName))
-                throw new ArgumentException("Product name is required.", nameof(productName));
+                throw new IFArgumentException("Product name is required.");
 
             if (quantity <= 0)
-                throw new ArgumentException("Quantity must be greater than zero.", nameof(quantity));
+                throw new IFArgumentException("Quantity must be greater than zero.");
 
             if (unitPrice <= 0)
-                throw new ArgumentException("Unit price must be greater than zero.", nameof(unitPrice));
+                throw new IFArgumentException("Unit price must be greater than zero.");
 
             ProductName = productName;
             Quantity = quantity;

@@ -1,6 +1,6 @@
 using AutoMapper;
+using InnovateFuture.Application.Commands.Orders;
 using InnovateFuture.Application.DTOs;
-using InnovateFuture.Application.Orders.Commands;
 using InnovateFuture.Domain.Entities;
 
 namespace InnovateFuture.Application.Profiles;
@@ -23,7 +23,7 @@ public class AutoMapperProfile: Profile
             });
         
         // Mapping Order entity to OrderDto
-        CreateMap<Order, OrderDto>()
+        CreateMap<Order, OrderResponse>()
             .ForMember(dest => dest.TotalAmount, opt => opt.MapFrom(src => src.TotalAmount))
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.CustomerName, opt => opt.MapFrom(src => src.CustomerName))

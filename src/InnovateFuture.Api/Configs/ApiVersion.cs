@@ -1,6 +1,6 @@
 namespace InnovateFuture.Api.Configs;
 
-public enum APIVersion
+public enum ApiVersion
 {   
     V1,
     V2,

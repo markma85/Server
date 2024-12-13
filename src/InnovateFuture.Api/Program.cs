@@ -2,12 +2,13 @@ using FluentValidation;
 using InnovateFuture.Api.Filters;
 using InnovateFuture.Api.Configs;
 using InnovateFuture.Application.Behaviors;
-using InnovateFuture.Application.Orders.Commands;
-using InnovateFuture.Application.Orders.Queries;
+using InnovateFuture.Application.Commands.Orders;
+using InnovateFuture.Application.Queries.Orders;
+using InnovateFuture.Application.Services.Security;
 using InnovateFuture.Infrastructure.Configs;
-using InnovateFuture.Infrastructure.Configs.Authentication;
 using InnovateFuture.Infrastructure.Persistence;
-using InnovateFuture.Infrastructure.Persistence.Orders;
+using InnovateFuture.Infrastructure.Persistence.Interfaces;
+using InnovateFuture.Infrastructure.Persistence.Repositories;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +25,7 @@ namespace InnovateFuture.Api
             var policyName = "defalutPolicy";
 
             var builder = WebApplication.CreateBuilder(args);
-
+            
             #region filter
             builder.Services.AddControllers(option =>
             {
@@ -77,7 +78,10 @@ namespace InnovateFuture.Api
             builder.Services.Configure<JWTConfig>(builder.Configuration.GetSection(JWTConfig.Section));
             // directly get jwt config value from appsettings and construct into an obj
             var jwtConfig = builder.Configuration.GetSection(JWTConfig.Section).Get<JWTConfig>();
-
+            if (jwtConfig == null)
+            {
+                throw new InvalidOperationException("JWT configuration is missing in appsettings.");
+            }
             builder.Services.AddJWTEXT(jwtConfig);
 
             builder.Services.AddTransient<CreateTokenService>();
@@ -101,7 +105,7 @@ namespace InnovateFuture.Api
             // swagger config => see more details in swagger config extension
             builder.Services.AddSwaggerEXT();
 
-            #region validators
+            #region fluent validators
             builder.Services.AddValidatorsFromAssemblyContaining<CreateOrderCommandValidator>();
             #endregion
 
@@ -117,6 +121,17 @@ namespace InnovateFuture.Api
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwaggerEXT();
+            }else
+            {
+                builder.Services.AddCors(option =>
+                {
+                    option.AddPolicy(policyName, policy =>
+                    {
+                        policy.WithOrigins("https://your-frontend-domain.com")
+                            .AllowAnyMethod()
+                            .AllowAnyHeader();
+                    });
+                });
             }
             
             app.UseAuthentication();

@@ -1,5 +1,5 @@
-using InnovateFuture.Api.Common;
 using InnovateFuture.Api.Exceptions;
+using InnovateFuture.Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -35,25 +35,25 @@ public class ExceptionFilter : IExceptionFilter
                 _logger.LogWarning("Validation exception: {Errors}", response.Errors);
                 break;
             
-            case ArgumentException:
+            case IFArgumentException:
                 response.Errors.Add(exception.Message);
                 context.Result = new BadRequestObjectResult(response);
                 _logger.LogWarning("Bad request exception: {Message}", exception.Message);
                 break;
             
-            case BadRequestException:
+            case IFBadRequestException:
                 response.Errors.Add(exception.Message);
                 context.Result = new BadRequestObjectResult(response);
                 _logger.LogWarning("Bad request exception: {Message}", exception.Message);
                 break;
             
-            case NotFoundException:
+            case IFNotFoundException:
                 response.Errors.Add(exception.Message);
                 context.Result = new NotFoundObjectResult(response);
                 _logger.LogWarning("Not found exception: {Message}", exception.Message);
                 break;
 
-            case UnauthorizedException:
+            case IFUnauthorizedException:
                 response.Errors.Add(exception.Message);
                 context.Result = new UnauthorizedObjectResult(response);
                 _logger.LogWarning("Unauthorized exception: {Message}", exception.Message);

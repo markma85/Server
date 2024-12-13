@@ -11,7 +11,7 @@ public static class SwaggerInitExtension
             services.AddSwaggerGen(option =>
             {
                 // get version info from version enum
-                typeof(APIVersion).GetEnumNames().ToList().ForEach(version =>
+                typeof(ApiVersion).GetEnumNames().ToList().ForEach(version =>
                 {
                     string versionString = version.ToString();
                     // title displayed in swagger
@@ -66,7 +66,7 @@ public static class SwaggerInitExtension
             app.UseSwaggerUI(option =>
             {
                 // get version info from version enum
-                typeof(APIVersion).GetEnumNames().ToList().ForEach(version =>
+                typeof(ApiVersion).GetEnumNames().ToList().ForEach(version =>
                 {
                     string versionString = version.ToString();
                     option.SwaggerEndpoint($"/swagger/{versionString}/swagger.json", $"API Version: {versionString}");

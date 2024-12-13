@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
-namespace InnovateFuture.Infrastructure.Configs.Authentication;
+namespace InnovateFuture.Infrastructure.Configs;
 
 public static class JWTInitExtension
 {
