@@ -1,14 +1,15 @@
 using FluentValidation;
 using InnovateFuture.Api.Filters;
 using InnovateFuture.Api.Configs;
+using InnovateFuture.Api.Middleware;
 using InnovateFuture.Application.Behaviors;
-using InnovateFuture.Application.Commands.Orders;
-using InnovateFuture.Application.Queries.Orders;
+using InnovateFuture.Application.Orders.Commands.CreateOrder;
+using InnovateFuture.Application.Orders.Queries.GetOrder;
 using InnovateFuture.Application.Services.Security;
+using InnovateFuture.Infrastructure.Common.Persistence;
 using InnovateFuture.Infrastructure.Configs;
-using InnovateFuture.Infrastructure.Persistence;
-using InnovateFuture.Infrastructure.Persistence.Interfaces;
-using InnovateFuture.Infrastructure.Persistence.Repositories;
+using InnovateFuture.Infrastructure.Orders.Persistence.Interfaces;
+using InnovateFuture.Infrastructure.Orders.Persistence.Repositories;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -30,9 +31,8 @@ namespace InnovateFuture.Api
             builder.Services.AddControllers(option =>
             {
                 //global filter register, working for all actions
-                option.Filters.Add<ModelValidationFilter>();
                 option.Filters.Add<CommonResultFilter>();
-                option.Filters.Add<ExceptionFilter>();
+                // option.Filters.Add<ExceptionFilter>();
             }).AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
@@ -134,12 +134,14 @@ namespace InnovateFuture.Api
                 });
             }
             
+            app.UseMiddleware<GlobalExceptionMiddleware>();
+            
             app.UseAuthentication();
 
             app.UseAuthorization();
 
             app.MapControllers();
-
+            
             app.Run();
         }
     }
