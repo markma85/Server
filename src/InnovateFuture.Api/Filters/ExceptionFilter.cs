@@ -51,7 +51,8 @@ namespace InnovateFuture.Api.Filters;
         }
         else
         {
-            response.Errors.Add("An unknown error occurred");
+            // response.Errors.Add("An unknown error occurred");
+            response.Errors.Add(exception.Message);
             context.Result = new JsonResult(response)
             {
                 StatusCode = 500
