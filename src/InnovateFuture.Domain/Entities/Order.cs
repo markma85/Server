@@ -1,26 +1,32 @@
-namespace InnovateFuture.Domain.Entities
-{
+using InnovateFuture.Domain.Exceptions;
+
+namespace InnovateFuture.Domain.Entities;
     public class Order
     {
         public Guid Id { get; private set; }
-        public string CustomerName { get; private set; }
+        public String CustomerName { get; private set; }
         public DateTime CreatedDate { get; private set; }
-
-        // Navigation property for EF Core
         public List<OrderItem> Items { get; private set; } = new();
-
         public decimal TotalAmount => Items.Sum(item => item.TotalPrice);
 
-        public Order(string customerName)
+        public Order(String customerName)
         {
+            if (string.IsNullOrWhiteSpace(customerName))
+                throw new IFDomainValidationException("Customer name is required.");
+
+            if (!customerName.StartsWith("VIP", StringComparison.OrdinalIgnoreCase))
+                throw new IFBusinessRuleViolationException("Customer name must start with 'VIP' for priority orders.");
+            
             Id = Guid.NewGuid();
-            CustomerName = customerName ?? throw new ArgumentNullException(nameof(customerName));
+            CustomerName = customerName;
             CreatedDate = DateTime.UtcNow;
         }
 
-        public void AddItem(string productName, int quantity, decimal unitPrice)
+        public void AddItem(OrderItem item)
         {
-            Items.Add(new OrderItem(productName, quantity, unitPrice));
+            if (Items.Count >= 10)
+                throw new IFBusinessRuleViolationException("An order cannot contain more than 10 items.");
+
+            Items.Add(item);
         }
     }
-}

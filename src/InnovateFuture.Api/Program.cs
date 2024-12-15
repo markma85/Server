@@ -1,15 +1,16 @@
-
 using FluentValidation;
-using FluentValidation.AspNetCore;
 using InnovateFuture.Api.Filters;
-using InnovateFuture.Api.Init;
+using InnovateFuture.Api.Configs;
 using InnovateFuture.Api.Middleware;
-using InnovateFuture.Application.Orders.Commands;
-using InnovateFuture.Application.Orders.Queries;
-using InnovateFuture.Application.Validators;
-using InnovateFuture.Infrastructure.Config;
-using InnovateFuture.Infrastructure.Interfaces;
-using InnovateFuture.Infrastructure.Persistence;
+using InnovateFuture.Application.Behaviors;
+using InnovateFuture.Application.Orders.Commands.CreateOrder;
+using InnovateFuture.Application.Orders.Queries.GetOrder;
+using InnovateFuture.Application.Services.Security;
+using InnovateFuture.Infrastructure.Common.Persistence;
+using InnovateFuture.Infrastructure.Configs;
+using InnovateFuture.Infrastructure.Orders.Persistence.Interfaces;
+using InnovateFuture.Infrastructure.Orders.Persistence.Repositories;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NLog;
@@ -25,14 +26,13 @@ namespace InnovateFuture.Api
             var policyName = "defalutPolicy";
 
             var builder = WebApplication.CreateBuilder(args);
-
+            
             #region filter
             builder.Services.AddControllers(option =>
             {
                 //global filter register, working for all actions
-                option.Filters.Add<ModelValidationFilter>();
                 option.Filters.Add<CommonResultFilter>();
-                option.Filters.Add<ExceptionFilter>();
+                // option.Filters.Add<ExceptionFilter>();
             }).AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
@@ -49,6 +49,8 @@ namespace InnovateFuture.Api
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             // customized instances
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+            builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            builder.Services.AddValidatorsFromAssembly(typeof(CreateOrderCommandValidator).Assembly);
             #endregion
             
             #region DB connection
@@ -71,6 +73,21 @@ namespace InnovateFuture.Api
             // Disable auto model validation
             builder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
             
+            #region JWT
+            // get jwt config values from appsettings and create an obj using JWTConfig model class, IOC will handle dependency injection
+            builder.Services.Configure<JWTConfig>(builder.Configuration.GetSection(JWTConfig.Section));
+            // directly get jwt config value from appsettings and construct into an obj
+            var jwtConfig = builder.Configuration.GetSection(JWTConfig.Section).Get<JWTConfig>();
+            if (jwtConfig == null)
+            {
+                throw new InvalidOperationException("JWT configuration is missing in appsettings.");
+            }
+            builder.Services.AddJWTEXT(jwtConfig);
+
+            builder.Services.AddTransient<CreateTokenService>();
+
+            #endregion
+            
             #region cors
             // cors
             builder.Services.AddCors(option =>
@@ -88,10 +105,8 @@ namespace InnovateFuture.Api
             // swagger config => see more details in swagger config extension
             builder.Services.AddSwaggerEXT();
 
-
-            #region validators
-            builder.Services.AddValidatorsFromAssemblyContaining<OrderDtoValidator>();
-            builder.Services.AddValidatorsFromAssemblyContaining<CreateOrderValidator>();
+            #region fluent validators
+            builder.Services.AddValidatorsFromAssemblyContaining<CreateOrderCommandValidator>();
             #endregion
 
             #region NLog
@@ -106,16 +121,27 @@ namespace InnovateFuture.Api
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwaggerEXT();
+            }else
+            {
+                builder.Services.AddCors(option =>
+                {
+                    option.AddPolicy(policyName, policy =>
+                    {
+                        policy.WithOrigins("https://your-frontend-domain.com")
+                            .AllowAnyMethod()
+                            .AllowAnyHeader();
+                    });
+                });
             }
             
-            app.UseMiddleware<FluentValidationMiddleware>();
+            app.UseMiddleware<GlobalExceptionMiddleware>();
             
             app.UseAuthentication();
 
             app.UseAuthorization();
 
             app.MapControllers();
-
+            
             app.Run();
         }
     }
