@@ -19,7 +19,6 @@ public class CreateOrderHandler : IRequestHandler<CreateOrderCommand, Guid>
         {
             order.AddItem(new OrderItem(item.ProductName, item.Quantity,item.UnitPrice));
         }
-        // Add the order to the repository
         await _orderRepository.AddAsync(order);
 
         return order.Id;

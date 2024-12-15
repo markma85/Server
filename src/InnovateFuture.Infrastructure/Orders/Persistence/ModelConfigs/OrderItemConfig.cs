@@ -8,10 +8,10 @@ public class OrderItemConfiguration : IEntityTypeConfiguration<OrderItem>
 {
     public void Configure(EntityTypeBuilder<OrderItem> builder)
     {
-        builder.HasKey(oi => oi.Id); // Primary Key
+        builder.HasKey(oi => oi.Id); 
         builder.Property(oi => oi.ProductName).IsRequired().HasMaxLength(200);
         builder.Property(oi => oi.Quantity).IsRequired();
         builder.Property(oi => oi.UnitPrice).IsRequired().HasColumnType("decimal(18,2)");
-        builder.Ignore(oi => oi.TotalPrice); // Not mapped to DB
+        builder.Ignore(oi => oi.TotalPrice);
     }
 }

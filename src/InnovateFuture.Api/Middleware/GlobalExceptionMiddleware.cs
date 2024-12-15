@@ -27,7 +27,6 @@ public class GlobalExceptionMiddleware
 
     private static Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
-        // Create a default response structure
         var response = new CommonResponse<object>
         {
             IsSuccess = false,
@@ -51,10 +50,8 @@ public class GlobalExceptionMiddleware
             _ => StatusCodes.Status500InternalServerError // Catch-all for unhandled exceptions
         };
 
-        // Set the content type to JSON
         context.Response.ContentType = "application/json";
 
-        // Write the response to the HTTP response body
         return context.Response.WriteAsync(JsonSerializer.Serialize(response));
     }
     private static int HandleValidationException(CommonResponse<object> response, FluentValidation.ValidationException validationException)
