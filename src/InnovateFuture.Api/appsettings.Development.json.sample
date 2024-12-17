@@ -1,0 +1,15 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "DBConnection": "Host=localhost;Database=InnovateFuture;Username=postgres;Password=password",
+  "JWTConfig": {
+      "SecrectKey": "SecrectKeyExample",
+      "Issuer": "innovateFuture",
+      "Audience": "innovateFuture",
+      "ExpireSeconds": 7200
+    }
+}
