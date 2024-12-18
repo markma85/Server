@@ -10,19 +10,19 @@ pipeline {
                 echo 'Cleaning up..'
             }
         }
-        stage('Checkout') {
-            steps {
-                script {
-                    echo 'Checking out..'
-                }
-                dir('Server') {
-                    git(
-                        url: 'https://github.com/Innovate-Future-Foundation/Server.git',
-                        branch: 'devops-mark-ma'
-                    )
-                }
-            }
-        }
+        // stage('Checkout') {
+        //     steps {
+        //         script {
+        //             echo 'Checking out..'
+        //         }
+        //         dir('Server') {
+        //             git(
+        //                 url: 'https://github.com/Innovate-Future-Foundation/Server.git',
+        //                 branch: 'devops-mark-ma'
+        //             )
+        //         }
+        //     }
+        // }
         stage('Build') {
             steps {
                 script {
