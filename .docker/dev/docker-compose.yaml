@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  postgres:
+    container_name: container-pg
+    image: postgres
+    hostname: localhost
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: InnovateFuture
+    volumes:
+      - ./postgres/postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  pgadmin:
+    container_name: container-pgadmin
+    image: dpage/pgadmin4
+    depends_on:
+      - postgres
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    volumes:
+      - ./pgadmin/servers.json:/pgadmin4/servers.json  # Mount pre-configured servers.json
+    restart: unless-stopped
+
+  dotnet-app:
+    container_name: iff-server
+    build:
+      context: ../../
+      dockerfile: .docker/dev/Dockerfile  # This assumes your .NET Dockerfile is in the root directory
+    ports:
+      - "5091:5091"  # Map port 5091 for http access
+      - "7173:7173"  # Map port 7173 for https access
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      DBConnection: Host=postgres;Port=5432;Username=admin;Password=root;Database=InnovateFuture
+      JWTConfig__SecrectKey: MY_SECRET_KEY
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    
+volumes:
+  postgres-data:
