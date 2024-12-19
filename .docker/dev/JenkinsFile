@@ -14,8 +14,11 @@ pipeline {
             steps {
                 script {
                     echo 'Building..'
+                    dir ('Server') {
+                        sh 'dotnet restore ./InnovateFuture.sln' // restore nuget packages
+                    }
                     dir('Server/src/InnovateFuture.Api/') {
-                        sh 'dotnet restore' // restore nuget packages
+                        
                         sh 'dotnet build "InnovateFuture.Api.csproj" -c Release -o ./app/build'
                         sh 'dotnet publish "InnovateFuture.Api.csproj" -c Release -o ./app/publish'
                         // build entity framework
