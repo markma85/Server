@@ -12,6 +12,7 @@ services:
       - "8080:443"
     volumes:
       - jenkins_data:/var/lib/jenkins
+      - ../dev/jenkins/jobs:/var/lib/jenkins/jobs
     restart: unless-stopped
     entrypoint: >
       sh -c "apt-get update && \
