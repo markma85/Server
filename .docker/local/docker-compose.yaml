@@ -42,6 +42,7 @@ services:
       # - jenkins_data:/var/lib/jenkins
       - "../dev/jenkins/jobs/Frontend pipeline/config.xml:/var/lib/jenkins/jobs/Frontend pipeline/config.xml"
       - "../dev/jenkins/jobs/Server pipeline/config.xml:/var/lib/jenkins/jobs/Server pipeline/config.xml"
+      - /var/run/docker.sock:/var/run/docker.sock # Mount the Docker socket
     environment:
       - ASPNETCORE_ENVIRONMENT=Local
     restart: unless-stopped
