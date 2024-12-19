@@ -15,6 +15,7 @@ pipeline {
                 script {
                     echo 'Building..'
                     dir ('Server') {
+                        sh 'echo "Current Directory: ${pwd}"'
                         sh 'dotnet restore ./InnovateFuture.sln' // restore nuget packages
                     }
                     dir('Server/src/InnovateFuture.Api/') {
