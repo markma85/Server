@@ -6,6 +6,10 @@ pipeline {
 
     // }
 
+    environment {
+        ASPNETCORE_ENVIRONMENT = 'Development'
+    }
+
     stages {
         stage('Cleanup') {
             steps {
@@ -26,7 +30,7 @@ pipeline {
                     echo 'Building..'
                     sh 'dotnet restore ./InnovateFuture.sln' // restore nuget packages
                     // build entity framework
-                    sh 'dotnet ef database update --project "./src/InnovateFuture.Infrastructure/InnovateFuture.Infrastructure.csproj" --startup-project "./src/InnovateFuture.Api/InnovateFuture.Api.csproj" --configuration Local'
+                    sh 'dotnet ef database update --project "./src/InnovateFuture.Infrastructure/InnovateFuture.Infrastructure.csproj" --startup-project "./src/InnovateFuture.Api/InnovateFuture.Api.csproj"'
                     dir('src/InnovateFuture.Api/') {
                         
                         sh 'dotnet build "InnovateFuture.Api.csproj" -c Release -o ./app/build'
