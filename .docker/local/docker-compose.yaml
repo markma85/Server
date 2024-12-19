@@ -4,7 +4,7 @@ services:
   postgres:
     container_name: container-pg
     image: postgres
-    hostname: localhost
+    hostname: postgres
     ports:
       - "5432:5432"
     environment:
@@ -35,7 +35,7 @@ services:
     stdin_open: true # Keep STDIN open even if not attached
     tty: true # Allocate a pseudo-TTY
     command: sleep infinity # Keep container running
-    hostname: localhost
+    hostname: jenkins
     ports:
       - "8080:443"
     volumes:
