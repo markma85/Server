@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  jenkins:
+    container_name: jenkins
+    image: ubuntu:24.04
+    stdin_open: true # Keep STDIN open even if not attached
+    tty: true # Allocate a pseudo-TTY
+    command: sleep infinity # Keep container running
+    hostname: localhost
+    ports:
+      - "8080:443"
+    volumes:
+      - jenkins_data:/var/lib/jenkins
+    restart: unless-stopped
+    entrypoint: >
+      sh -c "apt-get update && \
+      apt-get -y install sudo wget && \
+      wget https://raw.githubusercontent.com/markma85/Setup-Jenkins-Build-Env/main/jenkins-dotnet.bash && \
+      chmod +x jenkins-dotnet.bash && \
+      ./jenkins-dotnet.bash --ip-public 10.0.0.12 --docker-host 10.0.0.12 --docker-port 2375 && \
+      sleep infinity
+      "
+volumes:
+  jenkins_data:

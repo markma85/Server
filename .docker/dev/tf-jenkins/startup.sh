@@ -1,5 +1,5 @@
 #!/bin/bash
-apt-get update -y
+apt-get update
 apt-get install -y wget
 wget https://raw.githubusercontent.com/markma85/Setup-Jenkins-Build-Env/main/jenkins-dotnet.bash -O /tmp/jenkins-dotnet.bash
 chmod +x /tmp/jenkins-dotnet.bash
