@@ -1,5 +1,3 @@
-def envConfig
-
 pipeline {
     agent any
     // parameters {
@@ -15,8 +13,7 @@ pipeline {
             steps {
                 echo 'Preparing..'
                 script {
-                    envConfig = readJSON file: src/InnovateFuture.Api/appsettings.Local.json
-                    println envConfig['DBConnection']
+                    
                 }
             }
         }
