@@ -34,9 +34,7 @@ pipeline {
             steps {
                 script {
                     echo 'Testing..'
-                    dir('Server') {
-                        sh 'dotnet test'
-                    }
+                    sh 'dotnet test'
                 }
             }
         }
