@@ -11,16 +11,15 @@ pipeline {
         }
         stage ('Prepare') {
             steps {
-                echo 'Preparing..'
                 script {
-                    
+                    echo 'Preparing..'
                 }
             }
         }
         stage('Build') {
             steps {
-                echo 'Building..'
                 script {
+                    echo 'Building..'
                     sh 'dotnet restore ./InnovateFuture.sln' // restore nuget packages
                     // build entity framework
                     sh 'dotnet ef database update --project "./src/InnovateFuture.Infrastructure/InnovateFuture.Infrastructure.csproj" --startup-project "./src/InnovateFuture.Api/InnovateFuture.Api.csproj"'
@@ -33,8 +32,8 @@ pipeline {
         }
         stage('Test') {
             steps {
-                echo 'Testing..'
                 script {
+                    echo 'Testing..'
                     dir('Server/src/InnovateFuture.Api/') {
                         sh 'dotnet test'
                     }
