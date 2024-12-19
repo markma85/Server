@@ -485,7 +485,7 @@ $RECYCLE.BIN/
 src/InnovateFuture.Api/appsettings.Development.json
 
 # DevOps
-.docker/dev/postgres/postgres-data
-.docker/dev/tf-jenkins/.terraform
-.docker/dev/tf-jenkins/terraform.tfstate
-.docker/dev/tf-jenkins/.terraform.lock.hcl
+.devops/dev/postgres/postgres-data
+.devops/dev/tf-jenkins/.terraform
+.devops/dev/tf-jenkins/terraform.tfstate
+.devops/dev/tf-jenkins/.terraform.lock.hcl

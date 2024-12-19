@@ -11,8 +11,8 @@ services:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: root
       POSTGRES_DB: InnovateFuture
-    volumes:
-      - ./postgres/postgres-data:/var/lib/postgresql/data
+    # volumes:
+      # - ./postgres/postgres-data:/var/lib/postgresql/data
     restart: unless-stopped
 
   pgadmin:
@@ -33,7 +33,7 @@ services:
     container_name: iff-server
     build:
       context: ../../
-      dockerfile: .docker/dev/Dockerfile  # This assumes your .NET Dockerfile is in the root directory
+      dockerfile: .devops/dev/Dockerfile
     ports:
       - "5091:5091"  # Map port 5091 for http access
       - "7173:7173"  # Map port 7173 for https access
@@ -45,5 +45,5 @@ services:
       - postgres
     restart: unless-stopped
     
-volumes:
-  postgres-data:
+# volumes:
+  # postgres-data:
