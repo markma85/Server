@@ -15,7 +15,8 @@ pipeline {
             steps {
                 script {
                     echo 'Preparing..'
-                    envConfig = readJSON file: src/InnovateFuture.Api/appsettings.Local.json'
+                    envConfig = readJSON file: src/InnovateFuture.Api/appsettings.Local.json
+                    echo envConfig
                 }
             }
         }
