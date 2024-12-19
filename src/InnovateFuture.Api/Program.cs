@@ -57,6 +57,7 @@ namespace InnovateFuture.Api
             builder.Services.Configure<DBConnectionConfig>(builder.Configuration);
 
             var connectionString = builder.Configuration["DBConnection"];
+            Console.WriteLine($"Connection string: {connectionString}");
             
             builder.Services.AddDbContext<ApplicationDbContext>(
                 dbContextOptions => dbContextOptions
@@ -78,6 +79,7 @@ namespace InnovateFuture.Api
             builder.Services.Configure<JWTConfig>(builder.Configuration.GetSection(JWTConfig.Section));
             // directly get jwt config value from appsettings and construct into an obj
             var jwtConfig = builder.Configuration.GetSection(JWTConfig.Section).Get<JWTConfig>();
+            Console.WriteLine($"JWT Config: {jwtConfig}");
             if (jwtConfig == null)
             {
                 throw new InvalidOperationException("JWT configuration is missing in appsettings.");
