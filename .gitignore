@@ -485,6 +485,6 @@ $RECYCLE.BIN/
 src/InnovateFuture.Api/appsettings.Development.json
 
 # DevOps
-.devops/dev/tf-jenkins/.terraform
-.devops/dev/tf-jenkins/terraform.tfstate
-.devops/dev/tf-jenkins/.terraform.lock.hcl
+*.terraform
+*terraform.tfstate
+*.terraform.lock.hcl
