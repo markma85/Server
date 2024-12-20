@@ -33,14 +33,6 @@ resource "aws_security_group" "web_sg" {
   }
 
   ingress {
-    description = "Allow Docker access"
-    from_port   = 2375
-    to_port     = 2375
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
     description = "Allow HTTP access"
     from_port   = 80
     to_port     = 5091
@@ -68,7 +60,7 @@ resource "aws_instance" "backend_web_server" {
   ami                    = data.aws_ami.ubuntu.id
   instance_type          = "t2.micro"
   key_name               = aws_key_pair.key_pair.key_name
-  subnet_id              = var.subnet_id # Ensure you pass the appropriate subnet ID
+  subnet_id              = var.subnet_id
   vpc_security_group_ids = [aws_security_group.web_sg.id]
 
   root_block_device {

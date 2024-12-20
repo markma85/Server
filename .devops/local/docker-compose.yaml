@@ -26,7 +26,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: root
     volumes:
-      - pgadmin/servers.json:/pgadmin4/servers.json  # Mount pre-configured servers.json
+      - ./pgadmin/servers.json:/pgadmin4/servers.json  # Mount pre-configured servers.json
     restart: unless-stopped
 
   jenkins:
@@ -39,9 +39,8 @@ services:
     ports:
       - "8080:443"
     volumes:
-      # - jenkins_data:/var/lib/jenkins
-      - "jenkins/jobs/Frontend pipeline/config.xml:/var/lib/jenkins/jobs/Frontend pipeline/config.xml"
-      - "jenkins/jobs/Server pipeline/config.xml:/var/lib/jenkins/jobs/Server pipeline/config.xml"
+      - "./jenkins/jobs/Frontend pipeline/config.xml:/var/lib/jenkins/jobs/Frontend pipeline/config.xml"
+      - "./jenkins/jobs/Server pipeline/config.xml:/var/lib/jenkins/jobs/Server pipeline/config.xml"
       - /var/run/docker.sock:/var/run/docker.sock # Mount the Docker socket
     environment:
       - ASPNETCORE_ENVIRONMENT=Local
@@ -51,7 +50,7 @@ services:
       apt-get -y install sudo wget && \
       wget https://raw.githubusercontent.com/markma85/Setup-Jenkins-Build-Env/main/jenkins-dotnet.bash && \
       chmod +x jenkins-dotnet.bash && \
-      ./jenkins-dotnet.bash --ip-public 10.0.0.12 --docker-host 10.0.0.12 --docker-port 2375 && \
+      ./jenkins-dotnet.bash --ip-public 10.0.0.12 --docker-host ssh://hyperion@10.0.0.12 && \
       sleep infinity
       "
 # volumes:
