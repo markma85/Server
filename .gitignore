@@ -483,3 +483,9 @@ $RECYCLE.BIN/
 # Vim temporary swap files
 *.swp
 src/InnovateFuture.Api/appsettings.Development.json
+
+# DevOps
+*.terraform
+*terraform.tfstate
+terraform.tfstate.backup
+*.terraform.lock.hcl

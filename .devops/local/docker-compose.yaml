@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  postgres:
+    container_name: container-pg
+    image: postgres
+    hostname: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: InnovateFuture
+    # volumes:
+    #   - ./postgres/postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  pgadmin:
+    container_name: container-pgadmin
+    image: dpage/pgadmin4
+    depends_on:
+      - postgres
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    volumes:
+      - ./pgadmin/servers.json:/pgadmin4/servers.json  # Mount pre-configured servers.json
+    restart: unless-stopped
+
+  jenkins:
+    container_name: jenkins
+    image: ubuntu:24.04
+    stdin_open: true # Keep STDIN open even if not attached
+    tty: true # Allocate a pseudo-TTY
+    command: sleep infinity # Keep container running
+    hostname: jenkins
+    ports:
+      - "8080:443"
+    volumes:
+      - "./jenkins/jobs/Frontend pipeline/config.xml:/var/lib/jenkins/jobs/Frontend pipeline/config.xml"
+      - "./jenkins/jobs/Server pipeline/config.xml:/var/lib/jenkins/jobs/Server pipeline/config.xml"
+      - /var/run/docker.sock:/var/run/docker.sock # Mount the Docker socket
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Local
+    restart: unless-stopped
+    entrypoint: >
+      sh -c "apt-get update && \
+      apt-get -y install sudo wget && \
+      wget https://raw.githubusercontent.com/markma85/Setup-Jenkins-Build-Env/main/jenkins-dotnet.bash && \
+      chmod +x jenkins-dotnet.bash && \
+      ./jenkins-dotnet.bash --ip-public 10.0.0.12 --docker-host ssh://hyperion@10.0.0.12 && \
+      sleep infinity
+      "
+# volumes:
+  # jenkins_data:

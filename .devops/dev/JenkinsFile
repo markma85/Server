@@ -1,0 +1,49 @@
+pipeline {
+    agent any
+    // parameters {
+
+    // }
+    stages {
+        stage ('Prepare') {
+            steps {
+                script {
+                    echo 'Preparing..'
+                }
+            }
+        }
+        stage('Build') {
+            steps {
+                script {
+                    echo 'Building..'
+                    sh 'dotnet restore ./InnovateFuture.sln' // restore nuget packages
+                    dir('src/InnovateFuture.Api/') {
+                        sh 'dotnet build "InnovateFuture.Api.csproj" -c Release -o ./app/build'
+                        sh 'dotnet publish "InnovateFuture.Api.csproj" -c Release -o ./app/publish'
+                    }
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                script {
+                    echo 'Testing..'
+                    sh 'dotnet test'
+                }
+            }
+        }
+        stage('Entity Framework Migrations') {
+            steps {
+                script {
+                    echo 'Running Entity Framework Migrations..'
+                    // build entity framework
+                    sh 'dotnet ef database update --project "./src/InnovateFuture.Infrastructure/InnovateFuture.Infrastructure.csproj" --startup-project "./src/InnovateFuture.Api/InnovateFuture.Api.csproj" -- --environment "Local"'
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying....'
+            }
+        }
+    }
+}
