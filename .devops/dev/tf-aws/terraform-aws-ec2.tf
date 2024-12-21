@@ -68,7 +68,9 @@ resource "aws_instance" "backend_web_server" {
     volume_type = "gp2"
   }
   tags = {
-    Name = "Backend Web Server"
+    Project     = "inff"
+    Name        = "Backend Web Server"
+    Environment = "dev"
   }
 
   user_data = templatefile("startup.sh", {
