@@ -40,7 +40,7 @@ services:
   #   environment:
   #     ASPNETCORE_ENVIRONMENT: Development
   #     DBConnection: Host=postgres;Port=5432;Username=admin;Password=root;Database=InnovateFuture
-  #     JWTConfig__SecrectKey: MY_SECRET_KEY
+  #     JWTConfig__SecretKey: MY_SECRET_KEY
   #   depends_on:
   #     - postgres
   #   restart: unless-stopped

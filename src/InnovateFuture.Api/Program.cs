@@ -83,7 +83,7 @@ namespace InnovateFuture.Api
             builder.Services.Configure<JWTConfig>(builder.Configuration.GetSection(JWTConfig.Section));
             // directly get jwt config value from appsettings and construct into an obj
             var jwtConfig = builder.Configuration.GetSection(JWTConfig.Section).Get<JWTConfig>();
-            Console.WriteLine($"JWT Config: {jwtConfig.SecrectKey}");
+            Console.WriteLine($"JWT Config: {jwtConfig.SecretKey}");
             if (jwtConfig == null)
             {
                 throw new InvalidOperationException("JWT configuration is missing in appsettings.");
