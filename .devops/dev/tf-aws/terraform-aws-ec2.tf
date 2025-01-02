@@ -76,6 +76,30 @@ resource "aws_instance" "backend_web_server" {
   user_data = templatefile("startup.sh", {
     username = var.username
   })
+
+  provisioner "file" {
+    source      = "../pgadmin/servers.json"
+    destination = "/home/${var.username}/servers.json"
+    connection {
+      type        = "ssh"
+      host        = self.public_ip
+      user        = var.username
+      private_key = file("~/.ssh/id_rsa")
+    }
+  }
+  provisioner "remote-exec" {
+    inline = [
+      "sudo mkdir -p /opt/pgadmin",
+      "sudo mv /home/${var.username}/servers.json /opt/pgadmin/servers.json",
+      "sudo chown -R ${var.username}:${var.username} /opt/pgadmin",
+    ]
+    connection {
+      type        = "ssh"
+      host        = self.public_ip
+      user        = var.username
+      private_key = file("~/.ssh/id_rsa")
+    }
+  }
 }
 
 data "aws_ami" "ubuntu" {
