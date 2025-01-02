@@ -3,7 +3,7 @@
         "1": {
             "Name": "Local PostgreSQL",
             "Group": "Servers",
-            "Host": "host.docker.internal",
+            "Host": "postgres",
             "Port": 5432,
             "MaintenanceDB": "InnovateFuture",
             "Username": "admin",

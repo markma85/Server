@@ -14,6 +14,8 @@ services:
     # volumes:
       # - ./postgres/postgres-data:/var/lib/postgresql/data
     restart: unless-stopped
+    networks:
+      - inff-network-backend
 
   pgadmin:
     container_name: container-pgadmin
@@ -26,24 +28,30 @@ services:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: root
     volumes:
-      - ./pgadmin/servers.json:/pgadmin4/servers.json  # Mount pre-configured servers.json
+      - /opt/pgadmin/servers.json:/pgadmin4/servers.json  # Mount pre-configured servers.json
     restart: unless-stopped
+    networks:
+      - inff-network-backend
 
-  dotnet-app:
-    container_name: iff-server
-    build:
-      context: ../../
-      dockerfile: .devops/dev/Dockerfile
-    ports:
-      - "5091:5091"  # Map port 5091 for http access
-      - "7173:7173"  # Map port 7173 for https access
-    environment:
-      ASPNETCORE_ENVIRONMENT: Development
-      DBConnection: Host=postgres;Port=5432;Username=admin;Password=root;Database=InnovateFuture
-      JWTConfig__SecrectKey: MY_SECRET_KEY
-    depends_on:
-      - postgres
-    restart: unless-stopped
+  # dotnet-app:
+  #   container_name: iff-server
+  #   build:
+  #     context: ../../
+  #     dockerfile: .devops/dev/Dockerfile
+  #   ports:
+  #     - "5091:5091"  # Map port 5091 for http access
+  #     - "7173:7173"  # Map port 7173 for https access
+  #   environment:
+  #     ASPNETCORE_ENVIRONMENT: Development
+  #     DBConnection: Host=postgres;Port=5432;Username=admin;Password=root;Database=InnovateFuture
+  #     JWTConfig__SecretKey: MY_SECRET_KEY
+  #   depends_on:
+  #     - postgres
+  #   restart: unless-stopped
     
 # volumes:
   # postgres-data:
+
+networks:
+  inff-network-backend:
+    driver: bridge
