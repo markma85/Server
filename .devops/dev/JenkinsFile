@@ -1,8 +1,11 @@
 pipeline {
     agent any
-    // parameters {
+    environment {
+        
+    }
+    parameters {
 
-    // }
+    }
     stages {
         stage ('Prepare') {
             steps {

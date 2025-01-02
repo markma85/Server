@@ -29,21 +29,21 @@ services:
       - ./pgadmin/servers.json:/pgadmin4/servers.json  # Mount pre-configured servers.json
     restart: unless-stopped
 
-  dotnet-app:
-    container_name: iff-server
-    build:
-      context: ../../
-      dockerfile: .devops/dev/Dockerfile
-    ports:
-      - "5091:5091"  # Map port 5091 for http access
-      - "7173:7173"  # Map port 7173 for https access
-    environment:
-      ASPNETCORE_ENVIRONMENT: Development
-      DBConnection: Host=postgres;Port=5432;Username=admin;Password=root;Database=InnovateFuture
-      JWTConfig__SecrectKey: MY_SECRET_KEY
-    depends_on:
-      - postgres
-    restart: unless-stopped
+  # dotnet-app:
+  #   container_name: iff-server
+  #   build:
+  #     context: ../../
+  #     dockerfile: .devops/dev/Dockerfile
+  #   ports:
+  #     - "5091:5091"  # Map port 5091 for http access
+  #     - "7173:7173"  # Map port 7173 for https access
+  #   environment:
+  #     ASPNETCORE_ENVIRONMENT: Development
+  #     DBConnection: Host=postgres;Port=5432;Username=admin;Password=root;Database=InnovateFuture
+  #     JWTConfig__SecrectKey: MY_SECRET_KEY
+  #   depends_on:
+  #     - postgres
+  #   restart: unless-stopped
     
 # volumes:
   # postgres-data:
