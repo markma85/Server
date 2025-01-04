@@ -34,7 +34,7 @@ resource "aws_security_group" "web_sg" {
 
   ingress {
     description = "Allow HTTP access"
-    from_port   = 80
+    from_port   = 5091
     to_port     = 5091
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
@@ -43,7 +43,23 @@ resource "aws_security_group" "web_sg" {
   ingress {
     description = "Allow HTTPS access"
     from_port   = 443
-    to_port     = 7173
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "Allow PgAdmin access"
+    from_port   = 5050
+    to_port     = 5050
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "Allow Portainer access"
+    from_port   = 9443
+    to_port     = 9443
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -78,7 +94,7 @@ resource "aws_instance" "backend_web_server" {
   })
 
   provisioner "file" {
-    source      = "../../pgadmin/servers.json"
+    source      = "../pgadmin/servers.json"
     destination = "/home/${var.username}/servers.json"
     connection {
       type        = "ssh"
