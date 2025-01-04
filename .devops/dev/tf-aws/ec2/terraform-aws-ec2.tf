@@ -49,6 +49,20 @@ resource "aws_security_group" "web_sg" {
   }
 
   ingress {
+    description = "Allow Docker access"
+    from_port   = 2375
+    to_port     = 2375
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    description = "Allow Postgres access"
+    from_port   = 5432
+    to_port     = 5432
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
     description = "Allow PgAdmin access"
     from_port   = 5050
     to_port     = 5050
@@ -125,6 +139,19 @@ data "aws_ami" "ubuntu" {
     name   = "name"
     values = ["ubuntu/images/hvm-ssd*/ubuntu-noble-24.04-amd64-server-*"]
   }
+}
+
+data "aws_route53_zone" "mark_it_zone" {
+  name         = "mark-it-zone.com"
+  private_zone = false
+}
+
+resource "aws_route53_record" "backend_a_record" {
+  zone_id = data.aws_route53_zone.mark_it_zone.id
+  name    = "inff-backend.mark-it-zone.com"
+  type    = "A"
+  ttl     = 300
+  records = [aws_instance.backend_web_server.public_ip]
 }
 
 # output "ubuntu_ami_id" {
