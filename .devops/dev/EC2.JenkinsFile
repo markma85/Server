@@ -13,7 +13,8 @@ pipeline {
         AWS_CONFIGURE_REGION = 'ap-southeast-2'
         ECR_URL = '842675993907.dkr.ecr.ap-southeast-2.amazonaws.com'
         ECR_REPO = 'inff-mark/server'
-        DOCKER_IP = '3.26.244.199'
+        DOCKER_IP = 'inff-backend.mark-it-zone.com'
+        DOCKER_NETWORK = "inff-network-backend"
         DATABASE_PORT = '5432'
         DATABASE_NAME = 'InnovateFuture'
         DATABASE_CREDENTIALS = credentials('postgre_user')
@@ -130,7 +131,9 @@ pipeline {
                 script {
                     echo 'Setting up remote Docker host...'
                     sh "export DOCKER_HOST=${DOCKER_HOST}"
-                    sh "docker network create dev_inff-network-backend"
+                    if (sh(returnStatus: true, script: "docker network ls | grep ${env.DOCKER_NETWORK}") == 0)
+                        echo "Network ${env.DOCKER_NETWORK} does not exist. Creating..."
+                        sh "docker network create ${env.DOCKER_NETWORK}"
                 }
             }
         }
@@ -171,7 +174,7 @@ pipeline {
                                 script: """
                                     docker run -d --name inff-server \
                                         -p 5091:5091 \
-                                        --network dev_inff-network-backend \
+                                        --network ${env.DOCKER_NETWORK} \
                                         --env "DBConnection=${env.DATABASE_CONN}" \
                                         --env "JWTConfig__SecretKey=${JWTConfig__SecretKey}" \
                                         --env "ASPNETCORE_URLS=http://+:5091/" \
