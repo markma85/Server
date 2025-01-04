@@ -78,7 +78,7 @@ resource "aws_instance" "backend_web_server" {
   })
 
   provisioner "file" {
-    source      = "../pgadmin/servers.json"
+    source      = "../../pgadmin/servers.json"
     destination = "/home/${var.username}/servers.json"
     connection {
       type        = "ssh"

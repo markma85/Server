@@ -59,6 +59,10 @@ else
     exit 1
 fi
 
+# Add user to the docker group
+echo "[INFO] Adding user ${username} to the docker group..."
+sudo usermod -aG docker ${username}
+
 # Install Docker Compose
 echo "[INFO] Installing Docker Compose..."
 sudo curl -SL https://github.com/docker/compose/releases/download/v2.32.0/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
@@ -67,3 +71,8 @@ sudo chmod +x /usr/local/bin/docker-compose
 docker-compose --version || sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 # Verify Docker Compose installation
 docker-compose --version || exit_with_error "Docker Compose installation failed."
+
+# Run Portainer
+echo "[INFO] Running Portainer..."
+sudo docker volume create portainer_data
+sudo docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock portainer/portainer-ce:latest

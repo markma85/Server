@@ -5,8 +5,6 @@ services:
     container_name: container-pg
     image: postgres
     hostname: localhost
-    ports:
-      - "5432:5432"
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: root
@@ -55,3 +53,4 @@ services:
 networks:
   inff-network-backend:
     driver: bridge
+    external: true
