@@ -223,8 +223,8 @@ pipeline {
     post {
         always {
             script {
-                def jobName = java.net.URLEncoder.encode(env.JOB_NAME, "UTF-8")
-                def blueOceanUrl = "${env.JENKINS_URL}/blue/organizations/jenkins/${jobName}/detail/${jobName}/${env.BUILD_NUMBER}/pipeline/"
+                def jobName = java.net.URLEncoder.encode(env.JOB_NAME, "UTF-8").replace("+", "%20")
+                def blueOceanUrl = "${env.JENKINS_URL}blue/organizations/jenkins/${jobName}/detail/${jobName}/${env.BUILD_NUMBER}/pipeline"
                 wrap([$class: 'BuildUser']) {
                     discordSend(
                         webhookURL: 'https://discord.com/api/webhooks/1325091913975595080/1U_xTAiCnW3O526iK88OOGTj375WKko-4xwHNSRJDyb-FIT3ZzybTIUx9asCN9YNeslr',
@@ -234,15 +234,12 @@ pipeline {
 - Job Duration: ${currentBuild.durationString.replace(' and counting', '')}
 - Triggered by: ${env.BUILD_USER} <${env.BUILD_USER_EMAIL}>
 - Triggered at: ${nowTimesamp} UTC
-
 ## Git
 - Repository: ${env.CODE_REPO_URL}
 - Branch: ${env.GIT_BRANCH}
 - Commit: `${env.GIT_COMMIT}` by ${env.GIT_AUTHOR_NAME}
-
 ## ECR
 - Image Tag: ${env.CURRENT_TAG}
-
 ## Instance
 - Health Check: [Swagger](http://${env.DOCKER_IP}:5091/swagger/index.html)
 - Database Admin: [pgAdmin 4](http://${env.DOCKER_IP}:5050)
